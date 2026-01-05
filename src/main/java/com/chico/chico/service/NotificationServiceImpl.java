@@ -1,10 +1,8 @@
 package com.chico.chico.service;
 
 import com.chico.chico.dto.NotificationDTO;
-import com.chico.chico.entity.Course;
 import com.chico.chico.entity.Notification;
 import com.chico.chico.entity.User;
-import com.chico.chico.exception.CourseNotFoundException;
 import com.chico.chico.exception.NotificationNotFound;
 import com.chico.chico.exception.UserNotFoundException;
 import com.chico.chico.repository.CourseRepository;
@@ -17,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -47,7 +44,10 @@ public class NotificationServiceImpl implements NotificationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return notificationRepository.findByUserId(user.getId());
+        return notificationRepository.findByUserId(user.getId())
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
 

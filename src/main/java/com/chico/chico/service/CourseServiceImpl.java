@@ -1,17 +1,11 @@
 package com.chico.chico.service;
 
-import com.chico.chico.entity.Course;
-import com.chico.chico.entity.Notification;
-import com.chico.chico.entity.Role;
-import com.chico.chico.entity.User;
+import com.chico.chico.entity.*;
 import com.chico.chico.exception.CourseNotFoundException;
 import com.chico.chico.exception.NotTheOwnerException;
 import com.chico.chico.exception.UserIsNotATeacherException;
 import com.chico.chico.exception.UserNotFoundException;
-import com.chico.chico.repository.CourseRepository;
-import com.chico.chico.repository.LessonRepository;
-import com.chico.chico.repository.NotificationRepository;
-import com.chico.chico.repository.UserRepository;
+import com.chico.chico.repository.*;
 import com.chico.chico.dto.CourseDTO;
 import com.chico.chico.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +27,7 @@ public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final NotificationRepository notificationRepository;
+    private final SearchHistoryRepository searchHistoryRepository;
 
     @Override
     public CourseDTO createCourse(Course course) {
@@ -214,9 +210,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     /*
-    * to-do:
-    * replace it with recommendation system
-    * */
+     * to-do:
+     * replace it with recommendation system
+     * */
     @Override
     public Page<CourseDTO> getPublicCourses(Pageable pageable) {
         return courseRepository.findByIsPublicTrue(pageable)
@@ -225,6 +221,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseDTO> searchForCourses(String query, Pageable pageable) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        SearchHistory searchHistory = new SearchHistory();
+
+        searchHistory.setUser(user);
+        searchHistory.setQueryContent(query);
+        searchHistory.setCreatedAt(LocalDateTime.now());
+
+        searchHistoryRepository.save(searchHistory);
         return courseRepository.searchForCourses(query, pageable)
                 .map(this::mapToDTO);
     }

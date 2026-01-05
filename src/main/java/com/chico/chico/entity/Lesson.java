@@ -14,6 +14,7 @@ import lombok.*;
 public class Lesson {
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
