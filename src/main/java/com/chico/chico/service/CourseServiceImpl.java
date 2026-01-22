@@ -5,6 +5,7 @@ import com.chico.chico.exception.CourseNotFoundException;
 import com.chico.chico.exception.NotTheOwnerException;
 import com.chico.chico.exception.UserIsNotATeacherException;
 import com.chico.chico.exception.UserNotFoundException;
+import com.chico.chico.recommendation.SearchCleaner;
 import com.chico.chico.repository.*;
 import com.chico.chico.dto.CourseDTO;
 import com.chico.chico.security.JwtProvider;
@@ -229,10 +230,14 @@ public class CourseServiceImpl implements CourseService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        SearchCleaner searchCleaner = new SearchCleaner();
+
+        List<String> clean = searchCleaner.clean(query);
         SearchHistory searchHistory = new SearchHistory();
 
         searchHistory.setUser(user);
-        searchHistory.setQueryContent(query);
+        searchHistory.setQueryContent(query.toLowerCase());
+        searchHistory.setCleanQuery(clean);
         searchHistory.setCreatedAt(LocalDateTime.now());
 
         searchHistoryRepository.save(searchHistory);

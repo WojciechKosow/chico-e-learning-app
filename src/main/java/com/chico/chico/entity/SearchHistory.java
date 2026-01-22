@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,6 +21,14 @@ public class SearchHistory {
     private User user;
 
     private String queryContent;
+
+    @Column(name = "clean_queries")
+    @ElementCollection
+    @CollectionTable(
+            name = "search_history_clean_queries",
+            joinColumns = @JoinColumn(name = "search_history_id")
+    )
+    private List<String> cleanQuery;
 
     private LocalDateTime createdAt;
 }

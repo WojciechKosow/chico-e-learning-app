@@ -6,10 +6,7 @@ import com.chico.chico.entity.User;
 import com.chico.chico.exception.UserNotFoundException;
 import com.chico.chico.repository.SearchHistoryRepository;
 import com.chico.chico.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -46,7 +43,9 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         return new SearchHistoryDTO(
                 searchHistory.getId(),
                 searchHistory.getQueryContent(),
-                searchHistory.getUser().getFirstName() + " " + searchHistory.getUser().getLastName()
+                searchHistory.getUser().getFirstName() + " " + searchHistory.getUser().getLastName(),
+                searchHistory.getCreatedAt(),
+                searchHistory.getCleanQuery()
         );
     }
 }
