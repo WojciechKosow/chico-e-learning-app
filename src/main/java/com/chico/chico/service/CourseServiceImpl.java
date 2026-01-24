@@ -5,7 +5,7 @@ import com.chico.chico.exception.CourseNotFoundException;
 import com.chico.chico.exception.NotTheOwnerException;
 import com.chico.chico.exception.UserIsNotATeacherException;
 import com.chico.chico.exception.UserNotFoundException;
-import com.chico.chico.recommendation.SearchCleaner;
+import com.chico.chico.recommendation.cleaner.SearchCleaner;
 import com.chico.chico.repository.*;
 import com.chico.chico.dto.CourseDTO;
 import com.chico.chico.security.JwtProvider;

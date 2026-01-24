@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
     List<SearchHistory> findTop10ByUserOrderByCreatedAtDesc(User user);
+    List<SearchHistory> findTop20ByUserOrderByCreatedAtDesc(User user);
 }

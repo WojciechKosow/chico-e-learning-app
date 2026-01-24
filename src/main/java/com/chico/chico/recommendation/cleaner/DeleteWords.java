@@ -1,4 +1,4 @@
-package com.chico.chico.recommendation;
+package com.chico.chico.recommendation.cleaner;
 
 import java.util.Set;
 
