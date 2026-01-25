@@ -18,6 +18,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Page<Course> findByIsPublicTrue(Pageable pageable);
 
+    List<Course> findByIsPublicTrue();
+
     /*
     * Custom query for course search by (title, description, teacher's first and last name)
     * - filters only public courses
